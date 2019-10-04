@@ -26,14 +26,9 @@ def create_or_update_url():
     url = Url.query.filter_by(url=data['url']).first()
     if url:
         url.interval = interval
-        #change scheduler interval
-        #scheduler.cancel(url.job_id)
-        #scheduler.schedule(scheduled_time=datetime.utcnow(), func=tasks_factory, interval=1)
     else:
         url = Url(url=data['url'], interval=interval)
         db.session.add(url)
-        #create scheduler
-        #scheduler.schedule(scheduled_time=datetime.utcnow(), func=tasks_factory, interval=1)
     db.session.commit()
     return jsonify(url.to_dict(['id']))
 
@@ -47,8 +42,6 @@ def get_url(id):
 def delete_url(id):
     url = Url.query.get_or_404(id)
     response = jsonify(url.to_dict(['id']))
-    # delete scheduler
-    # scheduler.cancel(job)
     db.session.delete(url)
     db.session.commit()
     return response

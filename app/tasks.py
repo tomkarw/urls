@@ -11,7 +11,6 @@ TIMEOUT = app.config['TIMEOUT']
 
 def handle_response_from_url(url: Url) -> None:
     try:
-        print(url.id, url.url)
         resp = requests.get(url.url, timeout=TIMEOUT)
         r = Response(response=resp.text,
                      duration=resp.elapsed.total_seconds(),
