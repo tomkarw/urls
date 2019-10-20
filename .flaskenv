@@ -1,1 +1,1 @@
-FLASK_APP=urls_wp.py
+FLASK_APP=urls.py

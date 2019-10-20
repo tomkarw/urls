@@ -1,9 +1,8 @@
 import datetime
 import unittest
-from unittest import mock
 
 from app import app, db
-from app.models import Url, Response
+from app.models import Link, Reply
 
 
 class BaseTestCaseWithDatabase(unittest.TestCase):
@@ -35,8 +34,8 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
                 response.json
             )
 
-            # one Url
-            u1 = Url(url='url #1', interval=60)
+            # one Link
+            u1 = Link(url='url #1', interval=60)
             db.session.add(u1)
             db.session.commit()
 
@@ -48,8 +47,8 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
             )
 
             # many Urls
-            u2 = Url(url='url #2', interval=60)
-            u3 = Url(url='url #3', interval=60)
+            u2 = Link(url='url #2', interval=60)
+            u3 = Link(url='url #3', interval=60)
             db.session.add_all([u2, u3])
             db.session.commit()
 
@@ -97,7 +96,7 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
             )
             self.assertEqual(
                 {'id': 1, 'interval': 30, 'url': 'some url'},
-                Url.query.get(1).to_dict()
+                Link.query.get(1).to_dict()
             )
 
             # successful modify
@@ -110,7 +109,7 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
             )
             self.assertEqual(
                 {'id': 1, 'interval': 60, 'url': 'some url'},
-                Url.query.get(1).to_dict()
+                Link.query.get(1).to_dict()
             )
 
     def test_get_url(self):
@@ -120,7 +119,7 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
             self.assertEqual(response.status_code, 404)
 
             # successful get
-            u1 = Url(url='url #1', interval=60)
+            u1 = Link(url='url #1', interval=60)
             db.session.add(u1)
             db.session.commit()
 
@@ -138,7 +137,7 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
             self.assertEqual(response.status_code, 404)
 
             # successful delete
-            u1 = Url(url='url #1', interval=60)
+            u1 = Link(url='url #1', interval=60)
             db.session.add(u1)
             db.session.commit()
 
@@ -150,7 +149,7 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
             )
             self.assertEqual(
                 None,
-                Url.query.get(1)
+                Link.query.get(1)
             )
 
     def test_get_url_history(self):
@@ -163,7 +162,7 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
             self.assertEqual(response.status_code, 404)
 
             # no Responses
-            u1 = Url(url='url #1', interval=60)
+            u1 = Link(url='url #1', interval=60)
             db.session.add(u1)
             db.session.commit()
 
@@ -174,8 +173,8 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
                 response.json
             )
 
-            # one Response
-            r1 = Response(response='test response #1', duration=1, url=u1)
+            # one Reply
+            r1 = Reply(response='test response #1', duration=1, url=u1)
             r1.created_at = mock_datetime
             db.session.add(r1)
             db.session.commit()
@@ -190,8 +189,8 @@ class RoutesTestCase(BaseTestCaseWithDatabase):
             )
 
             # many Responses
-            r2 = Response(response='test response #2', duration=2, url=u1)
-            r3 = Response(response='test response #3', duration=3, url=u1)
+            r2 = Reply(response='test response #2', duration=2, url=u1)
+            r3 = Reply(response='test response #3', duration=3, url=u1)
             r2.created_at = mock_datetime
             r3.created_at = mock_datetime
             db.session.add_all([r2, r3])

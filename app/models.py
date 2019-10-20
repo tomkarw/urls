@@ -3,15 +3,15 @@ from datetime import datetime
 from app import db
 
 
-class Url(db.Model):
+class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(2048), unique=True, nullable=False)
     interval = db.Column(db.Integer, nullable=False)
     next_runtime = db.Column(db.DateTime, default=datetime.utcnow)
-    responses = db.relationship('Response', backref='url', lazy='dynamic')
+    replies = db.relationship('Reply', backref='link', lazy='dynamic')
 
     def __repr__(self):
-        return f'<Url {self.url}>'
+        return f'<Link {self.url}>'
 
     def to_dict(self, keys_to_include=None):
         as_dict = {
@@ -24,15 +24,15 @@ class Url(db.Model):
         return as_dict
 
 
-class Response(db.Model):
+class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     response = db.Column(db.String(2048))
     duration = db.Column(db.Numeric(1, 3), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    url_id = db.Column(db.Integer, db.ForeignKey('url.id'), nullable=False)
+    link_id = db.Column(db.Integer, db.ForeignKey('link.id'), nullable=False)
 
     def __repr__(self):
-        return f'<Response for url: {self.url.url}>'
+        return f'<Reply for url: {self.url.url}>'
 
     def to_dict(self):
         return {

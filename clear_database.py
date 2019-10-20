@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from app import db
-from app.models import Response
+from app.models import Reply
 
-for response in Response.query.all():
+for response in Reply.query.all():
     db.session.delete(response)
 db.session.commit()

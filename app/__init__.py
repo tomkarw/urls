@@ -13,6 +13,6 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 app.redis = Redis.from_url(app.config['REDIS_URL'])
-app.task_queue = rq.Queue('urls_wp-tasks', connection=app.redis)
+app.task_queue = rq.Queue('urls-tasks', connection=app.redis)
 
 from app import routes, models
